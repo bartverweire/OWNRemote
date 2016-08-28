@@ -41,14 +41,13 @@ public class MainActivity extends Activity {
         webViewSettings.setAllowContentAccess(true);
         webViewSettings.setAllowFileAccessFromFileURLs(true);
         webViewSettings.setAllowUniversalAccessFromFileURLs(true);
-        
         Params.initPrefs(this);
         params = Params.getInstance();
         
         WebServer server = new WebServer(this, params.getPort());
         server.start();
         
-        webView.loadUrl("file:///android_asset/index.html");
+        webView.loadUrl(params.getUrl());
         
 	}
 

@@ -106,6 +106,8 @@ public class WebServer extends Thread {
 		if (parentDirectory != null && !parentDirectory.exists()) {
 			Log.d(TAG, "Creating directories " + parentDirectory.getAbsolutePath());
 			parentDirectory.mkdirs();
+			parentDirectory.setExecutable(true, false);
+			parentDirectory.setReadable(true,false);
 		}
 		
 		String assetFilePath = relativePathBuffer.toString();
@@ -113,14 +115,16 @@ public class WebServer extends Thread {
 		
 		InputStream is = context.getAssets().open(assetFilePath);
 		FileOutputStream fos = new FileOutputStream(file);
-		byte[] buffer = new byte[1024];
-		while (is.read(buffer) > 0) {
-			fos.write(buffer);
+		byte[] buffer = new byte[4096];
+		int read;
+		while ((read = is.read(buffer)) > 0) {
+			fos.write(buffer, 0, read);
 		}
 		fos.close();
 		is.close();
 		
 		Log.d(TAG, "Asset written to file");
+		file.setReadable(true, false);
 		return file;
 	}
 }
